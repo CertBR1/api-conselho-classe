@@ -5,14 +5,14 @@ import { Publico } from 'src/util/decorator/publico.decorator';
 
 @Controller('auth')
 export class AuthController {
-    constructor(
-        private authService: AuthService
-    ) { }
+    // constructor(
+    //     private authService: AuthService
+    // ) { }
 
-    @Publico()
-    @UseGuards(LocalAuthGuard)
-    @Post('login')
-    async login(@Request() req) {
-        return await this.authService.login(req.user);
-    }
+    // @Publico()
+    // @UseGuards(LocalAuthGuard)
+    // @Post('login')
+    // async login(@Request() req) {
+    //     return await this.authService.login(req.user);
+    // }
 }

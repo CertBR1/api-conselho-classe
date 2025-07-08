@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guard/jwt-guard.guard';
+import { ConselhoClasseModule } from './conselho-classe/conselho-classe.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { JwtAuthGuard } from './auth/guard/jwt-guard.guard';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    AuthModule
+    AuthModule,
+    ConselhoClasseModule
   ],
   controllers: [AppController],
   providers: [
