@@ -4,12 +4,17 @@ import { UpdateConselhoClasseDto } from './dto/update-conselho-classe.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConselhoClasse } from './entities/conselho-classe.entity';
 import { DataSource, Repository } from 'typeorm';
+import { CreateRelatorioConselhoClasseDto } from './dto/create-relatorio-conselhor-classe.dto';
+import { RelatorioConselhoClasse } from './entities/relatorio-conselho-classe.entity';
 
 @Injectable()
 export class ConselhoClasseService {
+
   constructor(
     @InjectRepository(ConselhoClasse)
     private readonly conselhoClasseRepository: Repository<ConselhoClasse>,
+    @InjectRepository(RelatorioConselhoClasse)
+    private readonly relatorioConselhoClasseRepository: Repository<RelatorioConselhoClasse>,
     private readonly dataSource: DataSource
   ) { }
   async create(createConselhoClasseDto: CreateConselhoClasseDto) {
@@ -88,4 +93,35 @@ export class ConselhoClasseService {
       throw new HttpException(error.message, 500);
     }
   }
+
+  async createRelatorio(id: string, idAluno: string, createRelatorioConselhoClasseDto: CreateRelatorioConselhoClasseDto) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    try {
+      await queryRunner.connect();
+      await queryRunner.startTransaction();
+      const conselhoClasse = await this.conselhoClasseRepository.findOne({ where: { id } });
+      if (!conselhoClasse) {
+        throw new HttpException('Conselho de Classe nao encontrado', 404);
+      }
+      const relatorio = this.relatorioConselhoClasseRepository.create(createRelatorioConselhoClasseDto);
+      relatorio.conselho = conselhoClasse;
+      relatorio.idAluno = parseInt(idAluno);
+      await queryRunner.manager.save(relatorio);
+      await queryRunner.commitTransaction();
+      return relatorio;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(error.message, 500);
+    }
+  }
+
+  async findRelatorioByAluno(id: string, idAluno: string) {
+    try {
+      return await this.relatorioConselhoClasseRepository.find({ where: { idAluno: parseInt(idAluno) } });
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(error.message, 500);
+    }
+  }
+
 }

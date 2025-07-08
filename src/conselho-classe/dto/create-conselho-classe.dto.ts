@@ -3,6 +3,7 @@ import { IsDate, IsNotEmpty, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateConselhoClasseDto {
+
     @ApiProperty({
         description: 'Data em que o conselho de classe será realizado',
         example: '2025-07-08',

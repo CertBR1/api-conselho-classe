@@ -8,6 +8,7 @@ import {
 } from 'class-validator';
 
 export class CreateRelatorioConselhoClasseDto {
+
     @ApiProperty({
         description: 'ID do aluno (vem de outro sistema)',
         example: 123,
@@ -58,4 +59,5 @@ export class CreateRelatorioConselhoClasseDto {
     @IsOptional()
     @IsString({ message: 'O campo outros deve ser uma string' })
     outros?: string;
+
 }
